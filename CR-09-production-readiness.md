@@ -2,7 +2,7 @@
 
 ## Added in this milestone
 - `GET /api/health`: no-store readiness probe. It checks core configuration and PostgreSQL connectivity; production also requires `CRON_SECRET`. It returns HTTP 200 only when the relevant checks pass, otherwise HTTP 503. It never returns secret values.
-- `bun run check:env --production`: validates required environment variables, PostgreSQL URL format, production HTTPS origins, minimum secret lengths, and all-or-none Razorpay and Resend configuration. It warns if production is configured with Razorpay Test Mode keys. Without `--production`, local development does not require cron, and incomplete optional email configuration is a warning.
+- `bun run check:env --production`: validates required environment variables, PostgreSQL URL format, production HTTPS origins, minimum secret lengths, and all-or-none Razorpay and Resend configuration. It warns if production is configured with Razorpay Test Mode keys. Without `--production`, local development does not require cron, and incomplete optional email configuration is a warning. Leave both Resend variables blank to deploy without email delivery.
 - `bun run smoke:production -- https://YOUR_DOMAIN`: checks the homepage, sign-in, sign-up, and readiness endpoint.
 - Corrected the old README billing description so it reflects Razorpay rather than the pre-CR08 Stripe placeholder.
 

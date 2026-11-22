@@ -27,7 +27,7 @@ Set the generated value as `CRON_SECRET` in `.env.local` for scheduled checks. E
 |---|---|---|
 | Landing, auth, dashboard, monitors, detail page, diff, changes, notifications, settings, admin | Built | `DATABASE_URL`, `BETTER_AUTH_SECRET` |
 | Scheduled checks | Built (`/api/cron/check`, hourly via `vercel.json`) | `CRON_SECRET` + a scheduler (Vercel Cron works out of the box) |
-| Email alerts & password reset | Built; shows a setup state if missing | `RESEND_API_KEY`, `RESEND_FROM_EMAIL` |
+| Email alerts & password reset | Optional; both settings can stay blank until a verified sender is available | Set both `RESEND_API_KEY` and `RESEND_FROM_EMAIL` to enable |
 | AI summaries | Built; falls back to a rule-based summary | `ZAI_API_KEY`, `ZAI_API_BASE` |
 | Google sign-in | Built; button hidden/disabled if missing | `GOOGLE_CLIENT_ID/SECRET` |
 | **Paid checkout (Razorpay Subscriptions)** | Built in CR-08; activate only after INR pricing and Test Mode lifecycle checks. | Razorpay keys, three monthly INR plan IDs, webhook secret |
