@@ -23,7 +23,9 @@ for (const file of envFiles) {
 
 const errors = [];
 const warnings = [];
-const required = ["DATABASE_URL", "BETTER_AUTH_SECRET", "BETTER_AUTH_URL", "NEXT_PUBLIC_APP_URL", "CRON_SECRET"];
+const productionCheck = process.env.NODE_ENV === "production" || process.argv.includes("--production");
+const required = ["DATABASE_URL", "BETTER_AUTH_SECRET", "BETTER_AUTH_URL", "NEXT_PUBLIC_APP_URL"];
+if (productionCheck) required.push("CRON_SECRET");
 for (const key of required) if (!process.env[key]?.trim()) errors.push(`${key} is required.`);
 
 if (process.env.DATABASE_URL) {
@@ -50,7 +52,10 @@ if (razorpayCount > 0 && razorpayCount !== razorpayKeys.length) errors.push(`Raz
 if (process.env.NODE_ENV === "production" && razorpayCount === razorpayKeys.length && process.env.RAZORPAY_KEY_ID?.startsWith("rzp_test_")) warnings.push("Razorpay is using Test Mode keys; live customer payments will not work.");
 const emailKeys = ["RESEND_API_KEY", "RESEND_FROM_EMAIL"];
 const emailCount = emailKeys.filter((key) => process.env[key]?.trim()).length;
-if (emailCount === 1) errors.push("Configure both RESEND_API_KEY and RESEND_FROM_EMAIL, or leave both empty.");
+if (emailCount === 1) {
+  const message = "Configure both RESEND_API_KEY and RESEND_FROM_EMAIL, or leave both empty.";
+  (productionCheck ? errors : warnings).push(message);
+}
 
 for (const warning of warnings) console.warn(`WARN  ${warning}`);
 if (errors.length) {

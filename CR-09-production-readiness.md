@@ -1,8 +1,8 @@
 # CR-09 — Production deployment and verification
 
 ## Added in this milestone
-- `GET /api/health`: no-store readiness probe. It checks required production configuration and executes `SELECT 1` against PostgreSQL. It returns HTTP 200 only when both checks pass, otherwise HTTP 503. It never returns secret values.
-- `bun run check:env`: validates required environment variables, PostgreSQL URL format, production HTTPS origins, minimum secret lengths, and all-or-none Razorpay and Resend configuration. It warns if production is configured with Razorpay Test Mode keys.
+- `GET /api/health`: no-store readiness probe. It checks core configuration and PostgreSQL connectivity; production also requires `CRON_SECRET`. It returns HTTP 200 only when the relevant checks pass, otherwise HTTP 503. It never returns secret values.
+- `bun run check:env --production`: validates required environment variables, PostgreSQL URL format, production HTTPS origins, minimum secret lengths, and all-or-none Razorpay and Resend configuration. It warns if production is configured with Razorpay Test Mode keys. Without `--production`, local development does not require cron, and incomplete optional email configuration is a warning.
 - `bun run smoke:production -- https://YOUR_DOMAIN`: checks the homepage, sign-in, sign-up, and readiness endpoint.
 - Corrected the old README billing description so it reflects Razorpay rather than the pre-CR08 Stripe placeholder.
 
@@ -10,7 +10,7 @@
 1. Set Vercel project settings to the repository's root directory (`changeradar-work`) and the supported Bun/Node runtime for this app.
 2. Add production environment variables from `.env.example`. Use production `BETTER_AUTH_URL` and `NEXT_PUBLIC_APP_URL` with the exact HTTPS origin. Use secrets of at least 32 characters for `BETTER_AUTH_SECRET` and `CRON_SECRET`.
 3. Configure `DATABASE_URL` for the production PostgreSQL database. Confirm the database provider allows connections from the deployment platform and that connection limits are appropriate.
-4. Before deploying, run `bun install --frozen-lockfile`, `bun run check:env`, `bun run typecheck`, and `bun run build` locally or in CI with the production configuration (do not commit `.env`).
+4. Before deploying, run `bun install --frozen-lockfile`, `bun run check:env --production`, `bun run typecheck`, and `bun run build` locally or in CI with the production configuration (do not commit `.env`).
 5. Apply pending migrations once against the production database using `bun run db:migrate`. Back up the database first. Do not run `db:push` against production.
 6. Deploy. Confirm `/api/health` returns HTTP 200. Then run `bun run smoke:production -- https://YOUR_DOMAIN`.
 7. Verify sign-up, sign-in, password reset (if Resend configured), create/pause/resume/delete monitor, manual check, detected change, notification delivery, and scheduled cron execution.
@@ -26,7 +26,7 @@
 ## Verification commands
 ```bash
 bun install --frozen-lockfile
-bun run check:env
+bun run check:env --production
 bun run typecheck
 bun run build
 bun run db:migrate

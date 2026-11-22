@@ -7,7 +7,11 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 function missingCriticalConfiguration() {
-  return ["DATABASE_URL", "BETTER_AUTH_SECRET", "BETTER_AUTH_URL", "NEXT_PUBLIC_APP_URL", "CRON_SECRET"]
+  const required = ["DATABASE_URL", "BETTER_AUTH_SECRET", "BETTER_AUTH_URL", "NEXT_PUBLIC_APP_URL"];
+  // Local manual checks do not use the scheduled worker. Production readiness
+  // includes cron because the deployed app promises automatic monitoring.
+  if (process.env.NODE_ENV === "production") required.push("CRON_SECRET");
+  return required
     .filter((key) => !process.env[key]?.trim());
 }
 

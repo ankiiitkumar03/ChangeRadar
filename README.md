@@ -13,6 +13,14 @@ bun run db:migrate          # applies all pending SQL migrations (or `bun run db
 bun run dev --port 4000
 ```
 
+For local development, manual checks work without `CRON_SECRET`; scheduled checks require it. Generate a 32-byte secret in PowerShell or any terminal with Node.js:
+
+```bash
+node -e "console.log(require('node:crypto').randomBytes(32).toString('base64url'))"
+```
+
+Set the generated value as `CRON_SECRET` in `.env.local` for scheduled checks. Email and payment integrations are optional for local use; configure them only when you have their provider credentials.
+
 ## What works / what needs configuring
 
 | Capability | Status | Needs |
@@ -56,7 +64,7 @@ Email alerts now persist attempt counts, retry schedules, delivery leases, sent 
 
 ## CR-09 — Production readiness
 
-`GET /api/health` checks critical configuration and PostgreSQL connectivity. Run `bun run check:env` before deployment and `bun run smoke:production -- https://YOUR_DOMAIN` after deployment. Follow `CR-09-production-readiness.md` for the deployment sequence and manual end-to-end checks.
+`GET /api/health` checks critical configuration and PostgreSQL connectivity. Local development does not require the scheduled-check secret; production readiness does. Run `bun run check:env --production` before deployment and `bun run smoke:production -- https://YOUR_DOMAIN` after deployment. Follow `CR-09-production-readiness.md` for the deployment sequence and manual end-to-end checks.
 
 ## CR-10 — SEO and public discoverability
 
