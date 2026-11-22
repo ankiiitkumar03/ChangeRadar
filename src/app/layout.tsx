@@ -36,12 +36,21 @@ export const metadata: Metadata = {
     description:
       "Monitor public websites, detect meaningful changes, compare versions, and get alerts.",
     url: "/",
+    images: [
+      {
+        url: "/brand/changeradar-social.webp",
+        width: 1200,
+        height: 630,
+        alt: "ChangeRadar — website change monitoring",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "ChangeRadar — Never miss a change on the web",
     description:
       "Monitor public websites, detect meaningful changes, compare versions, and get alerts.",
+    images: ["/brand/changeradar-social.webp"],
   },
   keywords: [
     "website monitoring",

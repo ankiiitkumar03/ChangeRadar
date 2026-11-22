@@ -10,6 +10,17 @@ export default function manifest(): MetadataRoute.Manifest {
     display: "standalone",
     background_color: "#080a14",
     theme_color: "#080a14",
-    icons: [{ src: "/favicon.ico", sizes: "any", type: "image/x-icon" }],
+    icons: [
+      {
+        src: "/brand/changeradar-app-192.png",
+        sizes: "192x192",
+        type: "image/png",
+      },
+      {
+        src: "/brand/changeradar-app-512.png",
+        sizes: "512x512",
+        type: "image/png",
+      },
+    ],
   };
 }
