@@ -7,7 +7,7 @@
 - Corrected the old README billing description so it reflects Razorpay rather than the pre-CR08 Stripe placeholder.
 
 ## Deployment order
-1. Set Vercel project settings to the repository's root directory (`changeradar-work`) and the supported Bun/Node runtime for this app.
+1. Set the Vercel Root Directory to `.` (the repository root). `package.json` and `vercel.json` are both at this level.
 2. Add production environment variables from `.env.example`. Use production `BETTER_AUTH_URL` and `NEXT_PUBLIC_APP_URL` with the exact HTTPS origin. Use secrets of at least 32 characters for `BETTER_AUTH_SECRET` and `CRON_SECRET`.
 3. Configure `DATABASE_URL` for the production PostgreSQL database. Confirm the database provider allows connections from the deployment platform and that connection limits are appropriate.
 4. Before deploying, run `bun install --frozen-lockfile`, `bun run check:env --production`, `bun run typecheck`, and `bun run build` locally or in CI with the production configuration (do not commit `.env`).
@@ -17,7 +17,7 @@
 8. Keep Razorpay in Test Mode until the INR pricing page, Dashboard plan amounts, webhook secret, and complete subscription lifecycle have been tested. Switch to Live Mode only after account approval and a successful end-to-end test. The current public pricing catalogue must be aligned with INR before accepting live payments.
 
 ## Vercel settings to verify
-- Root Directory: `changeradar-work` (or the folder containing this `package.json`).
+- Root Directory: `.` (repository root; this is where `package.json` lives).
 - Build Command: `bun run build` (or the equivalent detected command).
 - Install Command: `bun install --frozen-lockfile`.
 - Cron: `vercel.json` schedules `/api/cron/check` hourly. Ensure `CRON_SECRET` is configured in the Production environment. Confirm the deployed cron invocation is authorized in Vercel logs.
